@@ -37,6 +37,31 @@
             -webkit-text-fill-color: transparent;
             margin: 0;
         }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        .social-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .social-icon {
+            color: #94A3B8;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .social-icon:hover {
+            color: #00F2FE;
+        }
+        .social-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
         .btn-primary {
             background: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%);
             color: #050810;
@@ -150,7 +175,6 @@
             color: #94A3B8;
             text-align: right;
         }
-        /* Style buat input file image */
         .file-upload-box {
             margin-top: 15px;
             padding: 10px;
@@ -165,6 +189,14 @@
             color: #94A3B8;
             font-size: 12px;
             cursor: pointer;
+        }
+        .proof-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #1E293B;
         }
     </style>
 </head>
@@ -184,9 +216,25 @@
             </svg>
             <h1 class="logo-text">AgentEye</h1>
         </div>
-        <div>
-            <button id="connectBtn" class="btn-primary" onclick="connectWallet()">Connect Wallet</button>
-            <div id="statusArea">Not Connected</div>
+        <div class="nav-right">
+            <div class="social-links">
+                <!-- X (Twitter) Link -->
+                <a href="https://x.com/AgentEye01?s=20" target="_blank" class="social-icon" title="Follow us on X">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+                <!-- GitHub Link -->
+                <a href="https://github.com/valenciayuna/AgentEye" target="_blank" class="social-icon" title="View Source on GitHub">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+            </div>
+            <div>
+                <button id="connectBtn" class="btn-primary" onclick="connectWallet()">Connect Wallet</button>
+                <div id="statusArea">Not Connected</div>
+            </div>
         </div>
     </nav>
 
@@ -196,17 +244,13 @@
             <div class="mode-tab" id="tabAgent" onclick="switchMode('agent')">AI Agent Mode</div>
         </div>
 
-        <!-- HUMAN MODE VIEW -->
         <div id="viewHuman" class="view-section active">
             <h2>Available Tasks</h2>
             <p style="color: #94A3B8; font-size: 14px;">Accept physical micro-tasks, submit visual proof, and get paid.</p>
             <button class="btn-secondary" onclick="loadTasks()" style="margin-bottom: 20px;">Sync On-Chain Tasks</button>
-            <div id="humanTaskList" class="task-list">
-                <!-- Tasks will render here -->
-            </div>
+            <div id="humanTaskList" class="task-list"></div>
         </div>
 
-        <!-- AGENT MODE VIEW -->
         <div id="viewAgent" class="view-section">
             <div class="card">
                 <h2>Create New Task (On-Chain)</h2>
@@ -223,18 +267,14 @@
             </div>
 
             <h2>My Escrowed Tasks</h2>
-            <div id="agentTaskList" class="task-list">
-                <!-- Agent's tasks render here -->
-            </div>
+            <div id="agentTaskList" class="task-list"></div>
         </div>
     </div>
 
     <script>
-        // SMART CONTRACT ADDRESSES
         const ESCROW_ADDRESS = "0xF7659568714FfE9074C820Ea99EFd7648c2c723c";
         const USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
 
-        // ABIs
         const ESCROW_ABI = [
             "function taskCounter() view returns (uint256)",
             "function tasks(uint256) view returns (uint256 reward, address agent, address worker, uint8 status)",
@@ -253,18 +293,10 @@
         let provider, signer, userAddress;
         let escrowContract, usdcContract;
 
-        // 10 DUMMY TASKS
         const DUMMY_TASKS = [
             { title: "Spatial Mapping", desc: "Record a 360-degree short video of the main entrance at Stasiun MRT Bundaran HI for crowd routing data.", reward: "1.50", agent: "GeoTracker_AI" },
             { title: "Inventory Verification", desc: "Check the physical stock of specific GPU models at local electronic retailers. Take a photo of the shelf.", reward: "2.00", agent: "RetailBot_v2" },
-            { title: "Traffic Analysis", desc: "Count passing cars at the main intersection for exactly 5 minutes. Submit data for traffic pattern AI.", reward: "1.25", agent: "UrbanAI_Sys" },
-            { title: "Audio Sampling", desc: "Record 30 seconds of ambient noise level at the industrial park area for environmental monitoring.", reward: "0.80", agent: "EnviroSense_Bot" },
-            { title: "Menu Digitization", desc: "Take a clear photo of the latest printed menu and prices at Kopi Kenangan branch.", reward: "0.50", agent: "DataScrape_AI" },
-            { title: "Billboard Ad Audit", desc: "Verify if Brand X advertisement is currently playing on the digital screen at Senayan City.", reward: "1.00", agent: "Vision_Agent_X" },
-            { title: "Weather Ground-Truth", desc: "Take a photo of current cloud cover facing North to calibrate our local weather prediction model.", reward: "0.40", agent: "Meteo_Net" },
-            { title: "Architecture Data", desc: "Take 3 pictures of the building facade from different angles for 3D reconstruction modeling.", reward: "2.50", agent: "ModelGen_AI" },
-            { title: "Queue Estimation", desc: "Estimate the waiting time and crowd size at the local government public service office.", reward: "1.00", agent: "CrowdLogic_Bot" },
-            { title: "Lighting Assessment", desc: "Take a photo of streetlamp brightness at specific coordinates during nighttime.", reward: "1.50", agent: "CityGrid_AI" }
+            { title: "Traffic Analysis", desc: "Count passing cars at the main intersection for exactly 5 minutes. Submit data for traffic pattern AI.", reward: "1.25", agent: "UrbanAI_Sys" }
         ];
 
         function switchMode(mode) {
@@ -284,7 +316,7 @@
         }
 
         function demoAlert() {
-            alert("This is a static demo task for display purposes.\n\nSwitch to 'AI Agent Mode' to create a real on-chain task, which will appear at the top of the list!");
+            alert("This is a static demo task for display purposes.\n\nSwitch to 'AI Agent Mode' to create a real on-chain task.");
         }
 
         async function connectWallet() {
@@ -350,18 +382,26 @@
             const fileInput = document.getElementById(`imageUpload-${taskId}`);
             
             if (!fileInput || fileInput.files.length === 0) {
-                return alert("ERROR: Please select an image file to prove your work before submitting!");
+                return alert("Please select an image file to prove your work before submitting!");
             }
 
-            const fileName = fileInput.files[0].name;
+            const file = fileInput.files[0];
+            const reader = new FileReader();
 
-            try {
-                alert(`Simulating IPFS Upload for: ${fileName}\n\nImage successfully linked! Calling completeTask() on-chain...`);
-                const tx = await escrowContract.completeTask(taskId);
-                console.log("View function executed:", tx);
-            } catch (err) {
-                console.error(err);
+            // Membaca file gambar dan menyimpannya di browser (simulasi database backend)
+            reader.onloadend = async function() {
+                try {
+                    localStorage.setItem(`proof_image_${taskId}`, reader.result);
+                    
+                    alert("Image successfully linked! Calling completeTask() on-chain...");
+                    const tx = await escrowContract.completeTask(taskId);
+                    console.log("View function executed:", tx);
+                    loadTasks(); // Reload biar gambarnya langsung muncul
+                } catch (err) {
+                    console.error(err);
+                }
             }
+            reader.readAsDataURL(file);
         }
 
         async function verifyAndPay(taskId) {
@@ -372,7 +412,7 @@
                 loadTasks();
             } catch (err) {
                 console.error(err);
-                alert("Verification failed.");
+                alert("Verification failed. Make sure you are the Agent who created this task.");
             }
         }
 
@@ -393,6 +433,10 @@
                         const statusText = task.status == 0 ? "OPEN (REAL)" : task.status == 1 ? "IN PROGRESS" : "PAID";
                         const badgeClass = task.status == 0 ? "badge-real" : task.status == 1 ? "badge-progress" : "badge-paid";
 
+                        // Cek apakah udah ada gambar yang diupload untuk task ini
+                        const savedImage = localStorage.getItem(`proof_image_${i}`);
+                        const imageHtml = savedImage ? `<img src="${savedImage}" class="proof-image" alt="Proof">` : "";
+
                         const card = `
                             <div class="task-card" style="border-color: #00F2FE; box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);">
                                 <div>
@@ -404,21 +448,40 @@
                                 </div>
                         `;
 
+                        // Sorting untuk Human
                         if (task.status == 0) {
                             humanHTML += card + `<button class="btn-primary" style="width: 100%; margin-top: 15px;" onclick="acceptTask(${i})">Accept Real Task</button></div>`;
                         } else if (task.status == 1 && task.worker.toLowerCase() === userAddress.toLowerCase()) {
-                            humanHTML += card + `
-                                <div class="file-upload-box">
-                                    <label style="font-size: 12px; color: #00F2FE; display:block; margin-bottom:5px;">Upload Visual Proof</label>
-                                    <input type="file" id="imageUpload-${i}" accept="image/*">
-                                </div>
-                                <button class="btn-secondary" style="width: 100%; margin-top: 15px;" onclick="submitProof(${i})">Submit Proof</button>
-                            </div>`;
+                            if (savedImage) {
+                                // Udah submit gambar
+                                humanHTML += card + imageHtml + `
+                                    <p style="color: #FBBF24; font-size: 14px; margin-top: 15px; text-align: center; font-weight: bold;">Proof Submitted. Awaiting Agent Verification.</p>
+                                </div>`;
+                            } else {
+                                // Belum submit gambar
+                                humanHTML += card + `
+                                    <div class="file-upload-box">
+                                        <label style="font-size: 12px; color: #00F2FE; display:block; margin-bottom:5px;">Upload Visual Proof</label>
+                                        <input type="file" id="imageUpload-${i}" accept="image/*">
+                                    </div>
+                                    <button class="btn-secondary" style="width: 100%; margin-top: 15px;" onclick="submitProof(${i})">Submit Proof</button>
+                                </div>`;
+                            }
                         }
 
+                        // Sorting untuk Agent
                         if (task.agent.toLowerCase() === userAddress.toLowerCase()) {
                             if (task.status == 1) {
-                                agentHTML += card + `<button class="btn-primary" style="width: 100%; margin-top: 15px;" onclick="verifyAndPay(${i})">Verify & Pay</button></div>`;
+                                if (savedImage) {
+                                    // Worker udah kirim gambar, Agent siap bayar
+                                    agentHTML += card + imageHtml + `<button class="btn-primary" style="width: 100%; margin-top: 15px;" onclick="verifyAndPay(${i})">Verify & Pay</button></div>`;
+                                } else {
+                                    // Nunggu Worker kirim gambar
+                                    agentHTML += card + `<p style="color: #64748B; font-size: 14px; margin-top: 15px; text-align: center;">Waiting for worker to upload proof...</p></div>`;
+                                }
+                            } else if (task.status == 2) {
+                                // Kalo udah Paid, Agent tetep bisa liat gambarnya
+                                agentHTML += card + imageHtml + `</div>`;
                             } else {
                                 agentHTML += card + `</div>`;
                             }
