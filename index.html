@@ -7,13 +7,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js"></script>
     <style>
         body { background-color: #080B11; color: #F3F4F6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        nav { width: 100%; max-width: 1000px; display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #1E293B; box-sizing: border-box; }
+        nav { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #1E293B; box-sizing: border-box; }
         .logo-container { display: flex; align-items: center; gap: 15px; }
         .logo-text { font-size: 26px; font-weight: 800; background: linear-gradient(90deg, #00F2FE, #4FACFE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
         .btn-connect { background: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%); color: #080B11; border: none; padding: 10px 20px; border-radius: 30px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); transition: 0.2s; }
         .btn-connect:hover { transform: scale(1.05); }
-        .main-content { max-width: 1000px; width: 100%; text-align: center; margin-top: 20px; padding: 20px; box-sizing: border-box; }
-        .role-switcher { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; background: #131B2E; padding: 8px; border-radius: 30px; border: 1px solid #1E293B; display: inline-flex; }
+        .main-content { max-width: 1200px; width: 100%; text-align: center; margin-top: 20px; padding: 20px; box-sizing: border-box; }
+        .role-switcher { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; background: #131B2E; padding: 8px; border-radius: 30px; border: 1px solid #1E293B; display: inline-flex; flex-wrap: wrap; }
         .btn-role { background: transparent; color: #94A3B8; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-role.active { background: #1E293B; color: #00F2FE; box-shadow: 0 0 10px rgba(0, 242, 254, 0.1); }
         .task-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; text-align: left; }
@@ -56,15 +56,15 @@
 
     <script>
         // ==========================================
-        // SMART CONTRACT ADDRESSES (FULLY INJECTED)
+        // SMART CONTRACT ADDRESSES
         // ==========================================
-        const CONTRACT_ADDRESS = "0x6AEAe8A726F561C36F4d91C2613628f095761A49"; 
+        const CONTRACT_ADDRESS = "0xF7659568714FfE9074C820Ea99EFd7648c2c723c"; 
         const USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
 
         const CONTRACT_ABI = [
             "function createTask(uint256 _rewardAmount, string memory _taskDetailsURI) external returns (uint256)",
             "function acceptTask(uint256 _taskId) external",
-            "function completeTask(uint256 _taskId) external",
+            "function completeTask(uint256 _taskId) external view",
             "function verifyAndPay(uint256 _taskId) external"
         ];
         
@@ -76,10 +76,20 @@
         let currentRole = "worker";
         let pendingUploadTaskIndex = null;
 
+        // 12 Tasks configuration
         let tasks = [
             { id: 1, status: 0, title: "📸 Sudirman Billboard Photo", reward: "0.50 USDC", agent: "Agent Vision_09", desc: "AI needs verification of the latest real-world billboard ads." },
             { id: 2, status: 1, title: "☕ Cafe Queue Check", reward: "0.35 USDC", agent: "GeoScout_AI", desc: "Take a front-view photo of the cafe for real-time crowd data." },
-            { id: 3, status: 1, title: "🛒 Minimarket Stock Check", reward: "0.20 USDC", agent: "RetailBot_V2", desc: "Verify instant noodle stock availability on local minimarket shelves." }
+            { id: 3, status: 1, title: "🛒 Minimarket Stock Check", reward: "0.20 USDC", agent: "RetailBot_V2", desc: "Verify instant noodle stock availability on local minimarket shelves." },
+            { id: 4, status: 0, title: "🚦 Traffic Light Report", reward: "0.45 USDC", agent: "Traffic_Net", desc: "Record a 10-second video to ensure the red light functions normally." },
+            { id: 5, status: 0, title: "🏧 Active ATM Verification", reward: "0.30 USDC", agent: "FinanceAI", desc: "Check if a specific ATM machine is currently offline or fully operational." },
+            { id: 6, status: 1, title: "🔌 EV Charging Station Check", reward: "0.75 USDC", agent: "EcoCharge_AI", desc: "Verify the physical condition of cables and EV parking slot availability." },
+            { id: 7, status: 0, title: "🌤️ Visual Weather Report", reward: "0.15 USDC", agent: "WeatherNode", desc: "Take a clear photo of the current sky to validate satellite data." },
+            { id: 8, status: 1, title: "🍔 Local Menu Translation", reward: "1.00 USDC", agent: "LingoBot", desc: "Photo of a local food stall menu for AI language model training." },
+            { id: 9, status: 0, title: "🌳 City Park Cleanliness", reward: "0.40 USDC", agent: "CivicScout", desc: "Rate and provide photo proof of public trash bins in the park." },
+            { id: 10, status: 1, title: "🚧 Road Repair Check", reward: "0.60 USDC", agent: "CityMapper_AI", desc: "Verify if the cable excavation project on Street X has been closed." },
+            { id: 11, status: 0, title: "🚌 Bus Stop Timetable", reward: "0.25 USDC", agent: "Transit_Tracker", desc: "Photograph the current timetable posted at the central bus station." },
+            { id: 12, status: 1, title: "💧 Public Fountain Status", reward: "0.10 USDC", agent: "CivicScout", desc: "Verify if the main plaza fountain is currently turned on or empty." }
         ];
 
         async function connectWallet() {
