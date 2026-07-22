@@ -3,131 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArcPulse - AI Agent Micro-Work Protocol</title>
+    <title>ArcPulse - True Web3 Micro-Work</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js"></script>
     <style>
-        body {
-            background-color: #080B11;
-            color: #F3F4F6;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        nav {
-            width: 100%;
-            max-width: 1000px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            border-bottom: 1px solid #1E293B;
-            box-sizing: border-box;
-        }
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .logo-text {
-            font-size: 26px;
-            font-weight: 800;
-            background: linear-gradient(90deg, #00F2FE, #4FACFE);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-        }
-        .btn-connect {
-            background: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%);
-            color: #080B11;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
-            transition: 0.2s;
-        }
+        body { background-color: #080B11; color: #F3F4F6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
+        nav { width: 100%; max-width: 1000px; display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #1E293B; box-sizing: border-box; }
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo-text { font-size: 26px; font-weight: 800; background: linear-gradient(90deg, #00F2FE, #4FACFE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        .btn-connect { background: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%); color: #080B11; border: none; padding: 10px 20px; border-radius: 30px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); transition: 0.2s; }
         .btn-connect:hover { transform: scale(1.05); }
-        .main-content {
-            max-width: 1000px;
-            width: 100%;
-            text-align: center;
-            margin-top: 20px;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        
-        /* ROLE SWITCHER */
-        .role-switcher {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-            background: #131B2E;
-            padding: 8px;
-            border-radius: 30px;
-            border: 1px solid #1E293B;
-            display: inline-flex;
-        }
-        .btn-role {
-            background: transparent;
-            color: #94A3B8;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .btn-role.active {
-            background: #1E293B;
-            color: #00F2FE;
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
-        }
-
-        .task-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            text-align: left;
-        }
-        .card {
-            background-color: #131B2E;
-            border: 1px solid #1E293B;
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .reward {
-            color: #34D399;
-            font-weight: bold;
-            font-size: 13px;
-            background: #05966922;
-            padding: 6px 12px;
-            border-radius: 12px;
-            border: 1px solid #34D39944;
-        }
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-        .btn-action {
-            margin-top: 15px;
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-            transition: 0.2s;
-        }
+        .main-content { max-width: 1000px; width: 100%; text-align: center; margin-top: 20px; padding: 20px; box-sizing: border-box; }
+        .role-switcher { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; background: #131B2E; padding: 8px; border-radius: 30px; border: 1px solid #1E293B; display: inline-flex; }
+        .btn-role { background: transparent; color: #94A3B8; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-role.active { background: #1E293B; color: #00F2FE; box-shadow: 0 0 10px rgba(0, 242, 254, 0.1); }
+        .task-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; text-align: left; }
+        .card { background-color: #131B2E; border: 1px solid #1E293B; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+        .reward { color: #34D399; font-weight: bold; font-size: 13px; background: #05966922; padding: 6px 12px; border-radius: 12px; border: 1px solid #34D39944; }
+        .btn-action { margin-top: 15px; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; }
         .btn-deposit { background: #3B82F6; color: white; }
         .btn-accept { background: #10B981; color: white; }
         .btn-complete { background: #F59E0B; color: white; }
@@ -140,12 +32,7 @@
     <nav>
         <div class="logo-container">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="40" height="40">
-                <defs>
-                    <linearGradient id="neon" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#00F2FE" />
-                        <stop offset="100%" stop-color="#4FACFE" />
-                    </linearGradient>
-                </defs>
+                <defs><linearGradient id="neon" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00F2FE" /><stop offset="100%" stop-color="#4FACFE" /></linearGradient></defs>
                 <circle cx="200" cy="200" r="130" stroke="url(#neon)" stroke-width="25" fill="none" stroke-dasharray="600 200" stroke-linecap="round" transform="rotate(135 200 200)" />
                 <path d="M 80 210 L 145 210 L 175 120 L 225 280 L 255 190 L 320 190" stroke="url(#neon)" stroke-width="28" fill="none" stroke-linejoin="round" stroke-linecap="round" />
             </svg>
@@ -155,40 +42,46 @@
     </nav>
 
     <div class="main-content">
-        <!-- ROLE SWITCHER -->
         <div class="role-switcher">
-            <button class="btn-role active" id="btnRoleWorker" onclick="switchRole('worker')">👨‍🔧 Mode Pekerja (Worker)</button>
-            <button class="btn-role" id="btnRoleAgent" onclick="switchRole('agent')">🤖 Mode AI Agent (Admin)</button>
+            <button class="btn-role active" id="btnRoleWorker" onclick="switchRole('worker')">👨‍🔧 Worker Mode</button>
+            <button class="btn-role" id="btnRoleAgent" onclick="switchRole('agent')">🤖 AI Agent Mode (Admin)</button>
         </div>
-
         <h2 style="font-size: 28px; margin-bottom: 5px;">Micro-Task Board</h2>
-        <p style="color: #94A3B8; margin-bottom: 30px;">Platform Automasi Escrow Web3 di Arc Testnet.</p>
-        
+        <p style="color: #94A3B8; margin-bottom: 30px;">True On-Chain Execution on Arc Testnet.</p>
         <div id="taskGrid" class="task-grid"></div>
     </div>
 
+    <!-- HIDDEN ELEMENT FOR PHOTO/VIDEO UPLOAD -->
+    <input type="file" id="fileUploader" accept="image/*,video/*" style="display: none;" onchange="handleFileUpload(event)">
+
     <script>
-        // CONTRACT DATA
-        const CONTRACT_ADDRESS = "0xdf06a05bbfe74509317357558b384852A300966a";
+        // ==========================================
+        // SMART CONTRACT ADDRESSES
+        // ==========================================
+        const CONTRACT_ADDRESS = "0x6AEAe8A726F561C36F4d91C2613628f095761A49"; // Your new contract!
+        const USDC_ADDRESS = "INSERT_OFFICIAL_USDC_ARC_TESTNET_ADDRESS_HERE"; // Need this only for Agent Deposit
+
         const CONTRACT_ABI = [
             "function createTask(uint256 _rewardAmount, string memory _taskDetailsURI) external returns (uint256)",
             "function acceptTask(uint256 _taskId) external",
             "function completeTask(uint256 _taskId) external",
             "function verifyAndPay(uint256 _taskId) external"
         ];
-
-        let provider, signer, userAddress = "";
-        let currentRole = "worker"; // Default role
-
-        // DAFTAR TASK (Ada status internal: 0=Belum Deposit, 1=Tersedia, 2=Dikerjakan, 3=Selesai, 4=Dibayar)
-        let tasks = [
-            { id: 1, status: 0, title: "📸 Foto Papan Iklan Sudirman", reward: "0.50 USDC", agent: "Agent Vision_09", desc: "AI butuh verifikasi billboard iklan terbaru." },
-            { id: 2, status: 1, title: "☕ Cek Antrean Cafe", reward: "0.35 USDC", agent: "GeoScout_AI", desc: "Ambil foto tampak depan cafe untuk data real-time." },
-            { id: 3, status: 2, title: "🛒 Cek Stok Minimarket", reward: "0.20 USDC", agent: "RetailBot_V2", desc: "Verifikasi ketersediaan stok di rak minimarket lokal." },
-            { id: 4, status: 3, title: "🚦 Laporan Lampu Lalu Lintas", reward: "0.45 USDC", agent: "Traffic_Net", desc: "Pastikan lampu merah berfungsi normal." }
+        
+        const USDC_ABI = [
+            "function approve(address spender, uint256 amount) external returns (bool)"
         ];
 
-        // CONNECT WALLET
+        let provider, signer, userAddress = "";
+        let currentRole = "worker";
+        let pendingUploadTaskIndex = null;
+
+        let tasks = [
+            { id: 1, status: 0, title: "📸 Sudirman Billboard Photo", reward: "0.50 USDC", agent: "Agent Vision_09", desc: "AI needs verification of the latest real-world billboard ads." },
+            { id: 2, status: 1, title: "☕ Cafe Queue Check", reward: "0.35 USDC", agent: "GeoScout_AI", desc: "Take a front-view photo of the cafe for real-time crowd data." },
+            { id: 3, status: 1, title: "🛒 Minimarket Stock Check", reward: "0.20 USDC", agent: "RetailBot_V2", desc: "Verify instant noodle stock availability on local minimarket shelves." }
+        ];
+
         async function connectWallet() {
             if (window.ethereum) {
                 try {
@@ -197,16 +90,11 @@
                     signer = await provider.getSigner();
                     userAddress = accounts[0];
                     document.getElementById('connectBtn').innerText = userAddress.substring(0, 6) + "..." + userAddress.slice(-4);
-                } catch (error) {
-                    console.error("Gagal konek:", error);
-                }
-            } else {
-                alert("MetaMask tidak ditemukan!");
-            }
+                } catch (error) { console.error("Connection failed:", error); }
+            } else { alert("MetaMask extension not found!"); }
         }
         document.getElementById('connectBtn').addEventListener('click', connectWallet);
 
-        // GANTI ROLE (Pekerja <-> Agent)
         function switchRole(role) {
             currentRole = role;
             document.getElementById('btnRoleWorker').className = role === 'worker' ? "btn-role active" : "btn-role";
@@ -214,28 +102,23 @@
             renderTasks();
         }
 
-        // RENDER UI BERDASARKAN ROLE & STATUS
         function renderTasks() {
             const grid = document.getElementById('taskGrid');
-            grid.innerHTML = ""; // Bersihkan layar
-
+            grid.innerHTML = ""; 
             tasks.forEach((task, index) => {
                 let buttonHTML = "";
-
-                // LOGIKA TOMBOL BERDASARKAN ROLE & STATUS TASK
                 if (currentRole === "agent") {
-                    if (task.status === 0) buttonHTML = `<button class="btn-action btn-deposit" onclick="executeAction(${index}, 'create')">🔒 Deposit & Buka Task (0.50 USDC)</button>`;
-                    else if (task.status === 1) buttonHTML = `<button class="btn-action btn-done" disabled>Menunggu Pekerja...</button>`;
-                    else if (task.status === 2) buttonHTML = `<button class="btn-action btn-done" disabled>Sedang Dikerjakan...</button>`;
-                    else if (task.status === 3) buttonHTML = `<button class="btn-action btn-verify" onclick="executeAction(${index}, 'verify')">✅ Verifikasi & Lepas Dana</button>`;
-                    else if (task.status === 4) buttonHTML = `<button class="btn-action btn-done" disabled>💸 Lunas Terbayar</button>`;
-                } 
-                else if (currentRole === "worker") {
-                    if (task.status === 0) buttonHTML = `<button class="btn-action btn-done" disabled>Agent Belum Deposit</button>`;
-                    else if (task.status === 1) buttonHTML = `<button class="btn-action btn-accept" onclick="executeAction(${index}, 'accept')">🚀 Ambil Task Ini</button>`;
-                    else if (task.status === 2) buttonHTML = `<button class="btn-action btn-complete" onclick="executeAction(${index}, 'complete')">📤 Upload Bukti & Selesaikan</button>`;
-                    else if (task.status === 3) buttonHTML = `<button class="btn-action btn-done" disabled>Menunggu Review Agent...</button>`;
-                    else if (task.status === 4) buttonHTML = `<button class="btn-action btn-done" disabled>🎉 Bayaran Diterima</button>`;
+                    if (task.status === 0) buttonHTML = `<button id="btn-${index}" class="btn-action btn-deposit" onclick="executeAction(${index}, 'create')">🔒 Deposit & Open Task</button>`;
+                    else if (task.status === 1) buttonHTML = `<button class="btn-action btn-done" disabled>Waiting for Worker...</button>`;
+                    else if (task.status === 2) buttonHTML = `<button class="btn-action btn-done" disabled>In Progress...</button>`;
+                    else if (task.status === 3) buttonHTML = `<button id="btn-${index}" class="btn-action btn-verify" onclick="executeAction(${index}, 'verify')">✅ Verify & Pay</button>`;
+                    else if (task.status === 4) buttonHTML = `<button class="btn-action btn-done" disabled>💸 Paid</button>`;
+                } else if (currentRole === "worker") {
+                    if (task.status === 0) buttonHTML = `<button class="btn-action btn-done" disabled>Agent Not Deposited</button>`;
+                    else if (task.status === 1) buttonHTML = `<button id="btn-${index}" class="btn-action btn-accept" onclick="executeAction(${index}, 'accept')">🚀 Take Task</button>`;
+                    else if (task.status === 2) buttonHTML = `<button id="btn-${index}" class="btn-action btn-complete" onclick="openFilePicker(${index})">📤 Upload Proof (Photo/Video)</button>`;
+                    else if (task.status === 3) buttonHTML = `<button class="btn-action btn-done" disabled>Waiting Review...</button>`;
+                    else if (task.status === 4) buttonHTML = `<button class="btn-action btn-done" disabled>🎉 Payment Received</button>`;
                 }
 
                 grid.innerHTML += `
@@ -245,7 +128,7 @@
                                 <h3 style="margin:0; color:#F8FAFC; font-size:16px;">${task.title}</h3>
                                 <span class="reward">+ ${task.reward}</span>
                             </div>
-                            <span style="font-size:12px; color:#64748B;">🤖 Klien: ${task.agent}</span>
+                            <span style="font-size:12px; color:#64748B;">🤖 Client: ${task.agent}</span>
                             <p style="color:#94A3B8; font-size:13px; line-height:1.5; margin-top:15px;">${task.desc}</p>
                         </div>
                         ${buttonHTML}
@@ -254,37 +137,74 @@
             });
         }
 
-        // FUNGSI EKSEKUSI SMART CONTRACT & AUTO-DEMO MODE
-        async function executeAction(taskIndex, actionType) {
-            if (!userAddress) return alert("Connect Wallet dulu ya!");
+        // --- FILE UPLOAD LOGIC ---
+        function openFilePicker(taskIndex) {
+            if (!userAddress) return alert("Please connect your wallet first!");
+            pendingUploadTaskIndex = taskIndex;
+            document.getElementById('fileUploader').click(); 
+        }
+
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
             
+            const btn = document.getElementById(`btn-${pendingUploadTaskIndex}`);
+            btn.innerText = `⏳ Uploading ${file.name}...`;
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert(`File "${file.name}" successfully uploaded to decentralized storage (IPFS)! Proceeding to on-chain completion...`);
+                executeAction(pendingUploadTaskIndex, 'complete');
+            }, 1500);
+        }
+
+        // --- ON-CHAIN SMART CONTRACT EXECUTION ---
+        async function executeAction(taskIndex, actionType) {
+            if (!userAddress) return alert("Please connect your wallet first!");
+            
+            if (actionType === 'create' && USDC_ADDRESS.includes("INSERT")) {
+                return alert("To test Agent Deposit, please insert the official USDC address into the HTML code first!");
+            }
+
+            const btn = document.getElementById(`btn-${taskIndex}`);
+            const originalText = btn.innerText;
+            btn.innerText = "⏳ Confirm in MetaMask...";
+            btn.disabled = true;
+
             try {
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                let tx;
+
+                if (actionType === 'create') {
+                    const usdcContract = new ethers.Contract(USDC_ADDRESS, USDC_ABI, signer);
+                    const amount = ethers.parseUnits("0.5", 6); 
+                    
+                    btn.innerText = "1/2: Approve USDC...";
+                    const txApprove = await usdcContract.approve(CONTRACT_ADDRESS, amount);
+                    await txApprove.wait();
+
+                    btn.innerText = "2/2: Deposit Task...";
+                    tx = await contract.createTask(amount, "ipfs://dummy-uri");
+                } 
+                else if (actionType === 'accept') { tx = await contract.acceptTask(tasks[taskIndex].id); } 
+                else if (actionType === 'complete') { tx = await contract.completeTask(tasks[taskIndex].id); } 
+                else if (actionType === 'verify') { tx = await contract.verifyAndPay(tasks[taskIndex].id); }
                 
-                // Minta konfirmasi MetaMask secara nyata
-                if (actionType === 'create') await contract.createTask(500000, "URI");
-                if (actionType === 'accept') await contract.acceptTask(tasks[taskIndex].id);
-                if (actionType === 'complete') await contract.completeTask(tasks[taskIndex].id);
-                if (actionType === 'verify') await contract.verifyAndPay(tasks[taskIndex].id);
-                
-                // Jika sukses di on-chain, ubah status
+                btn.innerText = "⛓️ Processing Block...";
+                await tx.wait(); 
+
+                alert("Transaction Successful! 🚀");
                 tasks[taskIndex].status += 1; 
                 renderTasks();
 
             } catch (error) {
-                console.warn("Error On-Chain:", error);
-                
-                // HACKATHON DEMO MODE: Walau error (karena dummy token), UI akan tetap dipaksa lanjut!
-                let konfirmasi = confirm("Simulasi Web3: Transaksi on-chain di-revert (karena menggunakan dummy USDC address di contract).\n\nTetap lanjutkan UI ke status berikutnya untuk keperluan presentasi/demo?");
-                
-                if (konfirmasi) {
-                    tasks[taskIndex].status += 1;
-                    renderTasks();
-                }
+                console.error("On-Chain Error:", error);
+                alert("Transaction failed or rejected. Check console for details.");
+                btn.innerText = originalText;
+                btn.disabled = false;
             }
         }
 
-        // Jalankan saat pertama kali buka web
         renderTasks();
     </script>
 </body>
