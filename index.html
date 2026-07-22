@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ArcPulse - AI Agent Micro-Work</title>
+    <!-- Import Ethers.js via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js"></script>
     <style>
         body {
@@ -110,27 +111,27 @@
     </nav>
 
     <div class="main-content">
-        <h2 style="font-size: 32px; margin-bottom: 10px;">Bantu AI Agent, Dapatkan USDC</h2>
-        <p style="color: #94A3B8; font-size: 16px;">Selesaikan tugas fisik sederhana & klaim bayaran instant bebas gas fee (Arc Testnet).</p>
+        <h2 style="font-size: 32px; margin-bottom: 10px;">Help AI Agents, Earn USDC</h2>
+        <p style="color: #94A3B8; font-size: 16px;">Complete simple physical tasks & claim instant gasless payouts (Arc Testnet).</p>
         
         <div id="statusArea" class="status-box">
-            🔴 Status: Wallet Belum Terkoneksi
+            🔴 Status: Wallet Not Connected
         </div>
 
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3 style="margin: 0; color: #F8FAFC;">📸 Foto Papan Iklan Sudirman</h3>
+                <h3 style="margin: 0; color: #F8FAFC;">📸 Photo of Sudirman Billboard</h3>
                 <span class="reward">+ 0.50 USDC</span>
             </div>
             <p style="color: #94A3B8; font-size: 14px; line-height: 1.6;">
-                Agent Vision_09 butuh verifikasi materi iklan terbaru di dunia nyata. Ambil foto dan unggah bukti untuk mendapatkan USDC.
+                Agent Vision_09 needs verification of the latest real-world billboard ads. Take a photo and upload proof to earn USDC.
             </p>
-            <button class="btn-connect" style="padding: 8px 16px; font-size: 14px;" onclick="ambilTask()">Ambil Task 🚀</button>
+            <button class="btn-connect" style="padding: 8px 16px; font-size: 14px;" onclick="ambilTask()">Take Task 🚀</button>
         </div>
     </div>
 
     <script>
-        // Contract address kamu sudah dimasukkan di sini!
+        // Contract address is already set here!
         const CONTRACT_ADDRESS = "0xdf06a05bbfe74509317357558b384852A300966a";
 
         const connectBtn = document.getElementById('connectBtn');
@@ -145,21 +146,21 @@
                     userAddress = accounts[0];
                     
                     connectBtn.innerText = userAddress.substring(0, 6) + "..." + userAddress.slice(-4);
-                    statusArea.innerHTML = "✅ Terkoneksi: " + userAddress + "<br><span style='font-size:12px; color:#94A3B8; font-weight:normal;'>Jaringan: Arc Testnet | Contract: " + CONTRACT_ADDRESS.substring(0,6) + "..." + "</span>";
+                    statusArea.innerHTML = "✅ Connected: " + userAddress + "<br><span style='font-size:12px; color:#94A3B8; font-weight:normal;'>Network: Arc Testnet | Contract: " + CONTRACT_ADDRESS.substring(0,6) + "..." + "</span>";
                 } catch (error) {
-                    console.error("Gagal konek:", error);
+                    console.error("Connection failed:", error);
                 }
             } else {
-                alert("MetaMask tidak ditemukan! Silakan install extension MetaMask dulu.");
+                alert("MetaMask not found! Please install the MetaMask extension first.");
             }
         }
 
         function ambilTask() {
             if (!userAddress) {
-                alert("Silakan Connect Wallet terlebih dahulu!");
+                alert("Please connect your wallet first!");
                 return;
             }
-            alert("Memanggil Smart Contract di Arc Testnet...\n(Fitur Eksekusi Smart Contract bisa kamu kembangkan lebih lanjut!)");
+            alert("Calling Smart Contract on Arc Testnet...\n(Smart Contract execution feature can be further developed!)");
         }
 
         connectBtn.addEventListener('click', connectWallet);
