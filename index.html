@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArcPulse - AI Agent Micro-Work</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js"></script>
+    <style>
+        body {
+            background-color: #080B11;
+            color: #F3F4F6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        nav {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #1E293B;
+            box-sizing: border-box;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo-text {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #00F2FE, #4FACFE);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+        .btn-connect {
+            background: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%);
+            color: #080B11;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+            transition: transform 0.2s;
+        }
+        .btn-connect:hover {
+            transform: scale(1.05);
+        }
+        .main-content {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .card {
+            background-color: #131B2E;
+            border: 1px solid #1E293B;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        .reward {
+            color: #34D399;
+            font-weight: bold;
+            font-size: 14px;
+            background: #05966922;
+            padding: 6px 12px;
+            border-radius: 12px;
+            border: 1px solid #34D39944;
+        }
+        .status-box {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #00F2FE;
+            background-color: #131B2E;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #1E293B;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="45" height="45">
+                <defs>
+                    <linearGradient id="neon" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00F2FE" />
+                        <stop offset="100%" stop-color="#4FACFE" />
+                    </linearGradient>
+                </defs>
+                <circle cx="200" cy="200" r="130" stroke="url(#neon)" stroke-width="25" fill="none" stroke-dasharray="600 200" stroke-linecap="round" transform="rotate(135 200 200)" />
+                <path d="M 80 210 L 145 210 L 175 120 L 225 280 L 255 190 L 320 190" stroke="url(#neon)" stroke-width="28" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+            </svg>
+            <h1 class="logo-text">ArcPulse</h1>
+        </div>
+        <button id="connectBtn" class="btn-connect">🔌 Connect Wallet</button>
+    </nav>
+
+    <div class="main-content">
+        <h2 style="font-size: 32px; margin-bottom: 10px;">Bantu AI Agent, Dapatkan USDC</h2>
+        <p style="color: #94A3B8; font-size: 16px;">Selesaikan tugas fisik sederhana & klaim bayaran instant bebas gas fee (Arc Testnet).</p>
+        
+        <div id="statusArea" class="status-box">
+            🔴 Status: Wallet Belum Terkoneksi
+        </div>
+
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0; color: #F8FAFC;">📸 Foto Papan Iklan Sudirman</h3>
+                <span class="reward">+ 0.50 USDC</span>
+            </div>
+            <p style="color: #94A3B8; font-size: 14px; line-height: 1.6;">
+                Agent Vision_09 butuh verifikasi materi iklan terbaru di dunia nyata. Ambil foto dan unggah bukti untuk mendapatkan USDC.
+            </p>
+            <button class="btn-connect" style="padding: 8px 16px; font-size: 14px;" onclick="ambilTask()">Ambil Task 🚀</button>
+        </div>
+    </div>
+
+    <script>
+        // Contract address kamu sudah dimasukkan di sini!
+        const CONTRACT_ADDRESS = "0xdf06a05bbfe74509317357558b384852A300966a";
+
+        const connectBtn = document.getElementById('connectBtn');
+        const statusArea = document.getElementById('statusArea');
+        let userAddress = "";
+
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    const provider = new ethers.BrowserProvider(window.ethereum);
+                    const accounts = await provider.send("eth_requestAccounts", []);
+                    userAddress = accounts[0];
+                    
+                    connectBtn.innerText = userAddress.substring(0, 6) + "..." + userAddress.slice(-4);
+                    statusArea.innerHTML = "✅ Terkoneksi: " + userAddress + "<br><span style='font-size:12px; color:#94A3B8; font-weight:normal;'>Jaringan: Arc Testnet | Contract: " + CONTRACT_ADDRESS.substring(0,6) + "..." + "</span>";
+                } catch (error) {
+                    console.error("Gagal konek:", error);
+                }
+            } else {
+                alert("MetaMask tidak ditemukan! Silakan install extension MetaMask dulu.");
+            }
+        }
+
+        function ambilTask() {
+            if (!userAddress) {
+                alert("Silakan Connect Wallet terlebih dahulu!");
+                return;
+            }
+            alert("Memanggil Smart Contract di Arc Testnet...\n(Fitur Eksekusi Smart Contract bisa kamu kembangkan lebih lanjut!)");
+        }
+
+        connectBtn.addEventListener('click', connectWallet);
+    </script>
+</body>
+</html>
