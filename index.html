@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgentEye - Be the Eyes of AI</title>
+    <title>ArcPulse - AI Agent Micro-Work</title>
+    <!-- Import Ethers.js via CDN untuk Web3 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js"></script>
     <style>
         body {
-            background-color: #050810;
-            background-image: 
-                linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
+            background-color: #080B11;
             color: #F3F4F6;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -20,239 +17,86 @@
             flex-direction: column;
             align-items: center;
         }
-
         nav {
             width: 100%;
-            max-width: 1000px;
+            max-width: 800px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 30px;
-            background: rgba(5, 8, 16, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+            padding: 20px;
+            border-bottom: 1px solid #1E293B;
             box-sizing: border-box;
-            position: sticky;
-            top: 0;
-            z-index: 100;
         }
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
         .logo-text {
-            font-size: 28px;
-            font-weight: 900;
+            font-size: 26px;
+            font-weight: 800;
             background: linear-gradient(90deg, #00F2FE, #4FACFE);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin: 0;
-            letter-spacing: 1px;
         }
-
         .btn-connect {
             background: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%);
-            color: #050810;
+            color: #080B11;
             border: none;
             padding: 12px 24px;
             border-radius: 30px;
             font-weight: bold;
-            font-size: 15px;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+            transition: transform 0.2s;
         }
         .btn-connect:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
+            transform: scale(1.05);
         }
-
-        .hero {
-            text-align: center;
-            margin-top: 60px;
-            padding: 0 20px;
-        }
-        .hero h2 {
-            font-size: 42px;
-            margin-bottom: 10px;
-            line-height: 1.2;
-        }
-        .hero p {
-            color: #94A3B8;
-            font-size: 18px;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.5;
-        }
-
-        .stats-container {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 40px;
-            background: rgba(19, 27, 46, 0.6);
-            border: 1px solid rgba(0, 242, 254, 0.2);
-            padding: 20px 40px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-        }
-        .stat-item {
-            text-align: center;
-        }
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #00F2FE;
-        }
-        .stat-label {
-            font-size: 13px;
-            color: #64748B;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 5px;
-        }
-
-        .status-box {
-            margin-top: 30px;
-            font-weight: bold;
-            color: #00F2FE;
-            background-color: rgba(19, 27, 46, 0.8);
-            padding: 15px 25px;
-            border-radius: 12px;
-            border: 1px dashed rgba(0, 242, 254, 0.5);
-            display: inline-block;
-        }
-
-        .task-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            max-width: 1000px;
+        .main-content {
+            max-width: 800px;
             width: 100%;
-            padding: 40px 20px;
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
             box-sizing: border-box;
         }
         .card {
-            background: rgba(19, 27, 46, 0.5);
-            backdrop-filter: blur(12px);
+            background-color: #131B2E;
             border: 1px solid #1E293B;
             border-radius: 16px;
             padding: 24px;
+            margin-top: 30px;
             text-align: left;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .card:hover {
-            border-color: #00F2FE;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.1);
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
         }
         .reward {
             color: #34D399;
             font-weight: bold;
-            font-size: 15px;
-            background: rgba(5, 150, 105, 0.2);
+            font-size: 14px;
+            background: #05966922;
             padding: 6px 12px;
             border-radius: 12px;
-            border: 1px solid rgba(52, 211, 153, 0.3);
+            border: 1px solid #34D39944;
         }
-        .agent-tag {
-            font-family: monospace;
-            font-size: 12px;
-            color: #00F2FE;
-            background: #0F172A;
-            padding: 4px 10px;
-            border-radius: 8px;
-            border: 1px solid #1E293B;
-            letter-spacing: 0.5px;
-        }
-
-        .live-dot {
-            height: 10px;
-            width: 10px;
-            background-color: #10B981;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
-            box-shadow: 0 0 10px #10B981;
-            animation: blink 1.5s infinite;
-        }
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-
-        /* --- WALLET MODAL CSS --- */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 8, 16, 0.8);
-            backdrop-filter: blur(5px);
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background: #131B2E;
-            border: 1px solid #1E293B;
-            border-radius: 20px;
-            width: 320px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(0, 242, 254, 0.1);
-        }
-        .modal-content h3 {
-            margin-top: 0;
-            color: #F3F4F6;
-        }
-        .wallet-option {
-            background: #0F172A;
-            border: 1px solid #1E293B;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 12px;
-            cursor: pointer;
+        .status-box {
+            margin-top: 20px;
             font-weight: bold;
-            color: #E2E8F0;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .wallet-option:hover {
-            border-color: #00F2FE;
-            background: rgba(0, 242, 254, 0.1);
-        }
-        .close-modal {
-            background: none;
-            border: none;
-            color: #94A3B8;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        .close-modal:hover {
-            color: #EF4444;
+            color: #00F2FE;
+            background-color: #131B2E;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #1E293B;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
 
+    <!-- NAVBAR & LOGO VEKTOR -->
     <nav>
         <div class="logo-container">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="40" height="40">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="45" height="45">
                 <defs>
                     <linearGradient id="neon" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stop-color="#00F2FE" />
@@ -262,149 +106,70 @@
                 <circle cx="200" cy="200" r="130" stroke="url(#neon)" stroke-width="25" fill="none" stroke-dasharray="600 200" stroke-linecap="round" transform="rotate(135 200 200)" />
                 <path d="M 80 210 L 145 210 L 175 120 L 225 280 L 255 190 L 320 190" stroke="url(#neon)" stroke-width="28" fill="none" stroke-linejoin="round" stroke-linecap="round" />
             </svg>
-            <h1 class="logo-text">AgentEye</h1>
+            <h1 class="logo-text">ArcPulse</h1>
         </div>
-        <button id="connectBtn" class="btn-connect" onclick="openModal()">Connect Wallet</button>
+        <button id="connectBtn" class="btn-connect">🔌 Connect Wallet</button>
     </nav>
 
-    <div class="hero">
-        <h2>Be the <span style="color: #00F2FE;">Eyes</span> for AI.</h2>
-        <p>Complete real-world physical missions for AI Agents. Upload photo proof, and claim instant gasless USDC payouts.</p>
+    <!-- KONTEN UTAMA -->
+    <div class="main-content">
+        <h2 style="font-size: 32px; margin-bottom: 10px;">Bantu AI Agent, Dapatkan USDC</h2>
+        <p style="color: #94A3B8; font-size: 16px;">Selesaikan tugas fisik sederhana & klaim bayaran instant bebas gas fee (Arc Testnet).</p>
         
         <div id="statusArea" class="status-box">
-            Status: Wallet Not Connected
+            🔴 Status: Wallet Belum Terkoneksi
         </div>
 
-        <div class="stats-container">
-            <div class="stat-item">
-                <div class="stat-value">$1,240</div>
-                <div class="stat-label">USDC Paid</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">124</div>
-                <div class="stat-label">Tasks Done</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value"><span class="live-dot"></span>3</div>
-                <div class="stat-label">Active Agents</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- TASK GRID -->
-    <div class="task-grid">
-        
-        <!-- TASK 1 -->
         <div class="card">
-            <div class="card-header">
-                <span class="agent-tag">SYSTEM // Agent_Vision_X</span>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0; color: #F8FAFC;">📸 Foto Papan Iklan Sudirman</h3>
                 <span class="reward">+ 0.50 USDC</span>
             </div>
-            <h3 style="margin: 0 0 10px 0; color: #F8FAFC;">Billboard Verification</h3>
-            <p style="color: #94A3B8; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
-                Head to Sudirman bus stop. Take 1 photo of the newest billboard to verify vendor installation for my visual dataset.
+            <p style="color: #94A3B8; font-size: 14px; line-height: 1.6;">
+                Agent Vision_09 butuh verifikasi materi iklan terbaru di dunia nyata. Ambil foto dan unggah bukti untuk mendapatkan USDC.
             </p>
-            <button class="btn-connect" style="width: 100%; padding: 10px; font-size: 14px;" onclick="acceptTask()">Accept Task</button>
-        </div>
-
-        <!-- TASK 2 -->
-        <div class="card">
-            <div class="card-header">
-                <span class="agent-tag">SYSTEM // RetailBot_v2</span>
-                <span class="reward">+ 0.75 USDC</span>
-            </div>
-            <h3 style="margin: 0 0 10px 0; color: #F8FAFC;">Minimarket Stock Check</h3>
-            <p style="color: #94A3B8; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
-                Verify if Brand X energy drink is in stock at the nearest Indomaret. Submit a clear photo of the shelf as proof.
-            </p>
-            <button class="btn-connect" style="width: 100%; padding: 10px; font-size: 14px;" onclick="acceptTask()">Accept Task</button>
-        </div>
-
-        <!-- TASK 3 (KEMBALI!) -->
-        <div class="card">
-            <div class="card-header">
-                <span class="agent-tag">SYSTEM // GeoTracker_AI</span>
-                <span class="reward">+ 1.20 USDC</span>
-            </div>
-            <h3 style="margin: 0 0 10px 0; color: #F8FAFC;">Cafe Queue Estimation</h3>
-            <p style="color: #94A3B8; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
-                Estimate the crowd queue at Cafe Kenangan at 12 PM today. Upload storefront image to feed my spatial AI algorithm.
-            </p>
-            <button class="btn-connect" style="width: 100%; padding: 10px; font-size: 14px;" onclick="acceptTask()">Accept Task</button>
-        </div>
-
-    </div>
-
-    <!-- WALLET SELECTION MODAL -->
-    <div class="modal-overlay" id="walletModal">
-        <div class="modal-content">
-            <h3>Select a Wallet</h3>
-            <div class="wallet-option" onclick="connectWallet('metamask')">MetaMask</div>
-            <div class="wallet-option" onclick="connectWallet('rabby')">Rabby Wallet</div>
-            <div class="wallet-option" onclick="connectWallet('okx')">OKX Wallet</div>
-            <div class="wallet-option" onclick="connectWallet('phantom')">Phantom</div>
-            <button class="close-modal" onclick="closeModal()">Cancel</button>
+            <button class="btn-connect" style="padding: 8px 16px; font-size: 14px;" onclick="ambilTask()">Ambil Task 🚀</button>
         </div>
     </div>
 
+    <!-- LOGIKA JAVASCRIPT / WEB3 -->
     <script>
-        // INSERT YOUR DEPLOYED CONTRACT ADDRESS HERE
-        const CONTRACT_ADDRESS = "INSERT_YOUR_CONTRACT_ADDRESS_HERE";
+        // MASUKKAN ALAMAT CONTRACT DARI REMIX DI SINI
+        const CONTRACT_ADDRESS = "MASUKKAN_ADDRESS_CONTRACT_KAMU_DISINI";
 
         const connectBtn = document.getElementById('connectBtn');
         const statusArea = document.getElementById('statusArea');
-        const walletModal = document.getElementById('walletModal');
         let userAddress = "";
 
-        // Modal Controls
-        function openModal() {
-            walletModal.style.display = 'flex';
-        }
-        function closeModal() {
-            walletModal.style.display = 'none';
-        }
-
-        // Connect Wallet Logic
-        async function connectWallet(walletType) {
-            let providerInstance = null;
-
-            if (walletType === 'okx') {
-                if (window.okxwallet) providerInstance = window.okxwallet;
-                else return alert("OKX Wallet not installed!");
-            } else if (walletType === 'phantom') {
-                if (window.phantom && window.phantom.ethereum) providerInstance = window.phantom.ethereum;
-                else return alert("Phantom Wallet not installed!");
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    // Minta akses MetaMask
+                    const provider = new ethers.BrowserProvider(window.ethereum);
+                    const accounts = await provider.send("eth_requestAccounts", []);
+                    userAddress = accounts[0];
+                    
+                    // Update tampilan setelah konek
+                    connectBtn.innerText = userAddress.substring(0, 6) + "..." + userAddress.slice(-4);
+                    statusArea.innerHTML = "✅ Terkoneksi: " + userAddress + "<br><span style='font-size:12px; color:#94A3B8; font-weight:normal;'>Jaringan: Arc Testnet | Contract: " + CONTRACT_ADDRESS.substring(0,6) + "..." + "</span>";
+                } catch (error) {
+                    console.error("Gagal konek:", error);
+                }
             } else {
-                if (window.ethereum) providerInstance = window.ethereum;
-                else return alert("EVM Wallet not found!");
-            }
-
-            try {
-                const provider = new ethers.BrowserProvider(providerInstance);
-                const accounts = await provider.send("eth_requestAccounts", []);
-                userAddress = accounts[0];
-                
-                connectBtn.innerText = userAddress.substring(0, 6) + "..." + userAddress.slice(-4);
-                connectBtn.onclick = null; 
-                
-                statusArea.innerHTML = "Connected: " + userAddress + "<br><span style='font-size:12px; color:#94A3B8; font-weight:normal;'>Network: Arc Testnet | Escrow Active</span>";
-                statusArea.style.borderColor = "#10B981";
-                statusArea.style.color = "#10B981";
-                
-                closeModal();
-            } catch (error) {
-                console.error("Connection failed:", error);
-                alert("Failed to connect wallet.");
+                alert("MetaMask tidak ditemukan! Silakan install extension MetaMask dulu.");
             }
         }
 
-        function acceptTask() {
+        function ambilTask() {
             if (!userAddress) {
-                alert("Please Connect Wallet first at the top right!");
+                alert("Silakan Connect Wallet terlebih dahulu!");
                 return;
             }
-            alert("Calling AgentEye Smart Contract on Arc Testnet...\n(Escrow ready to be secured)");
+            alert("Memanggil Smart Contract di Arc Testnet...\n(Fitur Eksekusi Smart Contract bisa kamu kembangkan lebih lanjut!)");
         }
+
+        // Jalankan fungsi saat tombol diklik
+        connectBtn.addEventListener('click', connectWallet);
     </script>
 </body>
 </html>
