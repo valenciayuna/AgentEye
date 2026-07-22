@@ -56,10 +56,10 @@
 
     <script>
         // ==========================================
-        // SMART CONTRACT ADDRESSES
+        // SMART CONTRACT ADDRESSES (FULLY INJECTED)
         // ==========================================
-        const CONTRACT_ADDRESS = "0x6AEAe8A726F561C36F4d91C2613628f095761A49"; // Your new contract!
-        const USDC_ADDRESS = "INSERT_OFFICIAL_USDC_ARC_TESTNET_ADDRESS_HERE"; // Need this only for Agent Deposit
+        const CONTRACT_ADDRESS = "0x6AEAe8A726F561C36F4d91C2613628f095761A49"; 
+        const USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
 
         const CONTRACT_ABI = [
             "function createTask(uint256 _rewardAmount, string memory _taskDetailsURI) external returns (uint256)",
@@ -162,10 +162,6 @@
         async function executeAction(taskIndex, actionType) {
             if (!userAddress) return alert("Please connect your wallet first!");
             
-            if (actionType === 'create' && USDC_ADDRESS.includes("INSERT")) {
-                return alert("To test Agent Deposit, please insert the official USDC address into the HTML code first!");
-            }
-
             const btn = document.getElementById(`btn-${taskIndex}`);
             const originalText = btn.innerText;
             btn.innerText = "⏳ Confirm in MetaMask...";
@@ -199,7 +195,7 @@
 
             } catch (error) {
                 console.error("On-Chain Error:", error);
-                alert("Transaction failed or rejected. Check console for details.");
+                alert("Transaction failed or rejected. Please ensure you have testnet gas and USDC.");
                 btn.innerText = originalText;
                 btn.disabled = false;
             }
