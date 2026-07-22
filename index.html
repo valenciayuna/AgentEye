@@ -231,7 +231,7 @@
 
     <script>
         // SMART CONTRACT ADDRESSES
-        const ESCROW_ADDRESS = "0x121E3Bf85009Fbc84a17BF1a0CB4715752eBA32C";
+        const ESCROW_ADDRESS = "0xF7659568714FfE9074C820Ea99EFd7648c2c723c";
         const USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
 
         // ABIs
@@ -346,11 +346,9 @@
             }
         }
 
-        // FUNGSI SUBMIT IMAGE YANG BARU
         async function submitProof(taskId) {
             const fileInput = document.getElementById(`imageUpload-${taskId}`);
             
-            // Validasi apakah gambar sudah dipilih
             if (!fileInput || fileInput.files.length === 0) {
                 return alert("ERROR: Please select an image file to prove your work before submitting!");
             }
@@ -409,10 +407,9 @@
                         if (task.status == 0) {
                             humanHTML += card + `<button class="btn-primary" style="width: 100%; margin-top: 15px;" onclick="acceptTask(${i})">Accept Real Task</button></div>`;
                         } else if (task.status == 1 && task.worker.toLowerCase() === userAddress.toLowerCase()) {
-                            // TAMBAHAN BOX UPLOAD GAMBAR DI SINI
                             humanHTML += card + `
                                 <div class="file-upload-box">
-                                    <label style="font-size: 12px; color: #00F2FE; display:block; margin-bottom:5px;">📸 Upload Visual Proof</label>
+                                    <label style="font-size: 12px; color: #00F2FE; display:block; margin-bottom:5px;">Upload Visual Proof</label>
                                     <input type="file" id="imageUpload-${i}" accept="image/*">
                                 </div>
                                 <button class="btn-secondary" style="width: 100%; margin-top: 15px;" onclick="submitProof(${i})">Submit Proof</button>
