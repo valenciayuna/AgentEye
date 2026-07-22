@@ -3,29 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArcPulse - AI Agent Micro-Work</title>
-    <!-- Import Ethers.js via CDN untuk Web3 -->
+    <title>AgentEye - Web3 Micro-Task</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js"></script>
     <style>
         body {
-            background-color: #080B11;
+            background-color: #050810;
             color: #F3F4F6;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
         nav {
-            width: 100%;
-            max-width: 800px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 20px 40px;
+            background: rgba(5, 8, 16, 0.9);
             border-bottom: 1px solid #1E293B;
-            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         .logo-container {
             display: flex;
@@ -33,70 +30,133 @@
             gap: 15px;
         }
         .logo-text {
-            font-size: 26px;
-            font-weight: 800;
+            font-size: 24px;
+            font-weight: 900;
             background: linear-gradient(90deg, #00F2FE, #4FACFE);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin: 0;
         }
-        .btn-connect {
+        .btn-primary {
             background: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%);
-            color: #080B11;
+            color: #050810;
             border: none;
-            padding: 12px 24px;
-            border-radius: 30px;
+            padding: 10px 20px;
+            border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
-            transition: transform 0.2s;
+            transition: 0.2s;
         }
-        .btn-connect:hover {
-            transform: scale(1.05);
+        .btn-primary:hover {
+            opacity: 0.8;
         }
-        .main-content {
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            box-sizing: border-box;
+        .btn-secondary {
+            background: transparent;
+            color: #00F2FE;
+            border: 1px solid #00F2FE;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-secondary:hover {
+            background: rgba(0, 242, 254, 0.1);
+        }
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .mode-switcher {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #1E293B;
+            padding-bottom: 10px;
+        }
+        .mode-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #64748B;
+            border-radius: 8px;
+        }
+        .mode-tab.active {
+            color: #00F2FE;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid #00F2FE;
+        }
+        .view-section {
+            display: none;
+        }
+        .view-section.active {
+            display: block;
         }
         .card {
-            background-color: #131B2E;
+            background: #131B2E;
             border: 1px solid #1E293B;
-            border-radius: 16px;
-            padding: 24px;
-            margin-top: 30px;
-            text-align: left;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
         }
-        .reward {
-            color: #34D399;
-            font-weight: bold;
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #94A3B8;
             font-size: 14px;
-            background: #05966922;
-            padding: 6px 12px;
-            border-radius: 12px;
-            border: 1px solid #34D39944;
         }
-        .status-box {
-            margin-top: 20px;
-            font-weight: bold;
-            color: #00F2FE;
-            background-color: #131B2E;
-            padding: 15px;
-            border-radius: 12px;
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
             border: 1px solid #1E293B;
+            background: #0F172A;
+            color: white;
+            box-sizing: border-box;
+        }
+        .task-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .task-card {
+            background: #0F172A;
+            border: 1px solid #1E293B;
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .badge {
             display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            width: max-content;
+        }
+        .badge-real { background: rgba(0, 242, 254, 0.2); color: #00F2FE; border: 1px solid #00F2FE; }
+        .badge-open { background: rgba(52, 211, 153, 0.2); color: #34D399; }
+        .badge-progress { background: rgba(251, 191, 36, 0.2); color: #FBBF24; }
+        .badge-paid { background: rgba(96, 165, 250, 0.2); color: #60A5FA; }
+        #statusArea {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #94A3B8;
+            text-align: right;
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR & LOGO VEKTOR -->
     <nav>
         <div class="logo-container">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="45" height="45">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="35" height="35">
                 <defs>
                     <linearGradient id="neon" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stop-color="#00F2FE" />
@@ -106,70 +166,274 @@
                 <circle cx="200" cy="200" r="130" stroke="url(#neon)" stroke-width="25" fill="none" stroke-dasharray="600 200" stroke-linecap="round" transform="rotate(135 200 200)" />
                 <path d="M 80 210 L 145 210 L 175 120 L 225 280 L 255 190 L 320 190" stroke="url(#neon)" stroke-width="28" fill="none" stroke-linejoin="round" stroke-linecap="round" />
             </svg>
-            <h1 class="logo-text">ArcPulse</h1>
+            <h1 class="logo-text">AgentEye</h1>
         </div>
-        <button id="connectBtn" class="btn-connect">🔌 Connect Wallet</button>
+        <div>
+            <button id="connectBtn" class="btn-primary" onclick="connectWallet()">Connect Wallet</button>
+            <div id="statusArea">Not Connected</div>
+        </div>
     </nav>
 
-    <!-- KONTEN UTAMA -->
-    <div class="main-content">
-        <h2 style="font-size: 32px; margin-bottom: 10px;">Bantu AI Agent, Dapatkan USDC</h2>
-        <p style="color: #94A3B8; font-size: 16px;">Selesaikan tugas fisik sederhana & klaim bayaran instant bebas gas fee (Arc Testnet).</p>
-        
-        <div id="statusArea" class="status-box">
-            🔴 Status: Wallet Belum Terkoneksi
+    <div class="container">
+        <div class="mode-switcher">
+            <div class="mode-tab active" id="tabHuman" onclick="switchMode('human')">Human Mode</div>
+            <div class="mode-tab" id="tabAgent" onclick="switchMode('agent')">AI Agent Mode</div>
         </div>
 
-        <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3 style="margin: 0; color: #F8FAFC;">📸 Foto Papan Iklan Sudirman</h3>
-                <span class="reward">+ 0.50 USDC</span>
+        <!-- HUMAN MODE VIEW -->
+        <div id="viewHuman" class="view-section active">
+            <h2>Available Tasks</h2>
+            <p style="color: #94A3B8; font-size: 14px;">Accept physical micro-tasks, submit visual proof, and get paid.</p>
+            <button class="btn-secondary" onclick="loadTasks()" style="margin-bottom: 20px;">Sync On-Chain Tasks</button>
+            <div id="humanTaskList" class="task-list">
+                <!-- Tasks will render here -->
             </div>
-            <p style="color: #94A3B8; font-size: 14px; line-height: 1.6;">
-                Agent Vision_09 butuh verifikasi materi iklan terbaru di dunia nyata. Ambil foto dan unggah bukti untuk mendapatkan USDC.
-            </p>
-            <button class="btn-connect" style="padding: 8px 16px; font-size: 14px;" onclick="ambilTask()">Ambil Task 🚀</button>
+        </div>
+
+        <!-- AGENT MODE VIEW -->
+        <div id="viewAgent" class="view-section">
+            <div class="card">
+                <h2>Create New Task (On-Chain)</h2>
+                <p style="color: #94A3B8; font-size: 14px;">Deposit USDC to Escrow and assign a physical verification task to humans.</p>
+                <div class="form-group">
+                    <label>Task Description / Instruction</label>
+                    <input type="text" id="taskUri" placeholder="e.g., Verify billboard ad installation at Sudirman Station">
+                </div>
+                <div class="form-group">
+                    <label>Reward (USDC)</label>
+                    <input type="number" id="taskReward" placeholder="e.g., 5">
+                </div>
+                <button class="btn-primary" onclick="createTask()">Approve & Deposit Task</button>
+            </div>
+
+            <h2>My Escrowed Tasks</h2>
+            <div id="agentTaskList" class="task-list">
+                <!-- Agent's tasks render here -->
+            </div>
         </div>
     </div>
 
-    <!-- LOGIKA JAVASCRIPT / WEB3 -->
     <script>
-        // MASUKKAN ALAMAT CONTRACT DARI REMIX DI SINI
-        const CONTRACT_ADDRESS = "MASUKKAN_ADDRESS_CONTRACT_KAMU_DISINI";
+        // SMART CONTRACT ADDRESSES
+        const ESCROW_ADDRESS = "0x517251c800aA4bA686857e796c1e3D521774AAB0";
+        const USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
 
-        const connectBtn = document.getElementById('connectBtn');
-        const statusArea = document.getElementById('statusArea');
-        let userAddress = "";
+        // ABIs
+        const ESCROW_ABI = [
+            "function taskCounter() view returns (uint256)",
+            "function tasks(uint256) view returns (uint256 reward, address agent, address worker, uint8 status)",
+            "function createTask(uint256 _rewardAmount, string memory _taskDetailsURI) returns (uint256)",
+            "function acceptTask(uint256 _taskId)",
+            "function completeTask(uint256 _taskId) view",
+            "function verifyAndPay(uint256 _taskId)"
+        ];
+        
+        const ERC20_ABI = [
+            "function approve(address spender, uint256 amount) returns (bool)",
+            "function allowance(address owner, address spender) view returns (uint256)",
+            "function decimals() view returns (uint8)"
+        ];
 
+        let provider, signer, userAddress;
+        let escrowContract, usdcContract;
+
+        // 10 DUMMY TASKS (For UI Display)
+        const DUMMY_TASKS = [
+            { title: "Spatial Mapping", desc: "Record a 360-degree short video of the main entrance at Stasiun MRT Bundaran HI for crowd routing data.", reward: "1.50", agent: "GeoTracker_AI" },
+            { title: "Inventory Verification", desc: "Check the physical stock of specific GPU models at local electronic retailers. Take a photo of the shelf.", reward: "2.00", agent: "RetailBot_v2" },
+            { title: "Traffic Analysis", desc: "Count passing cars at the main intersection for exactly 5 minutes. Submit data for traffic pattern AI.", reward: "1.25", agent: "UrbanAI_Sys" },
+            { title: "Audio Sampling", desc: "Record 30 seconds of ambient noise level at the industrial park area for environmental monitoring.", reward: "0.80", agent: "EnviroSense_Bot" },
+            { title: "Menu Digitization", desc: "Take a clear photo of the latest printed menu and prices at Kopi Kenangan branch.", reward: "0.50", agent: "DataScrape_AI" },
+            { title: "Billboard Ad Audit", desc: "Verify if Brand X advertisement is currently playing on the digital screen at Senayan City.", reward: "1.00", agent: "Vision_Agent_X" },
+            { title: "Weather Ground-Truth", desc: "Take a photo of current cloud cover facing North to calibrate our local weather prediction model.", reward: "0.40", agent: "Meteo_Net" },
+            { title: "Architecture Data", desc: "Take 3 pictures of the building facade from different angles for 3D reconstruction modeling.", reward: "2.50", agent: "ModelGen_AI" },
+            { title: "Queue Estimation", desc: "Estimate the waiting time and crowd size at the local government public service office.", reward: "1.00", agent: "CrowdLogic_Bot" },
+            { title: "Lighting Assessment", desc: "Take a photo of streetlamp brightness at specific coordinates during nighttime.", reward: "1.50", agent: "CityGrid_AI" }
+        ];
+
+        // UI Toggles
+        function switchMode(mode) {
+            document.getElementById('tabHuman').classList.remove('active');
+            document.getElementById('tabAgent').classList.remove('active');
+            document.getElementById('viewHuman').classList.remove('active');
+            document.getElementById('viewAgent').classList.remove('active');
+
+            if (mode === 'human') {
+                document.getElementById('tabHuman').classList.add('active');
+                document.getElementById('viewHuman').classList.add('active');
+            } else {
+                document.getElementById('tabAgent').classList.add('active');
+                document.getElementById('viewAgent').classList.add('active');
+            }
+            loadTasks();
+        }
+
+        // Dummy Button Alert
+        function demoAlert() {
+            alert("This is a static demo task for display purposes.\n\nSwitch to 'AI Agent Mode' to create a real on-chain task, which will appear at the top of the list!");
+        }
+
+        // Web3 Logic
         async function connectWallet() {
-            if (window.ethereum) {
+            if (!window.ethereum) return alert("Please install a Web3 Wallet (MetaMask, Rabby, OKX).");
+            try {
+                provider = new ethers.BrowserProvider(window.ethereum);
+                signer = await provider.getSigner();
+                userAddress = await signer.getAddress();
+                
+                escrowContract = new ethers.Contract(ESCROW_ADDRESS, ESCROW_ABI, signer);
+                usdcContract = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, signer);
+
+                document.getElementById('connectBtn').innerText = userAddress.substring(0, 6) + "..." + userAddress.slice(-4);
+                document.getElementById('statusArea').innerHTML = `Connected<br><span style="font-size:11px;">${userAddress}</span>`;
+                
+                loadTasks();
+            } catch (err) {
+                console.error(err);
+                alert("Connection failed.");
+            }
+        }
+
+        async function createTask() {
+            if (!signer) return alert("Connect wallet first!");
+            const uri = document.getElementById('taskUri').value;
+            const rewardInput = document.getElementById('taskReward').value;
+            if (!uri || !rewardInput) return alert("Fill all fields");
+
+            try {
+                // USDC uses 6 decimals
+                const rewardAmount = ethers.parseUnits(rewardInput, 6); 
+
+                console.log("Approving USDC...");
+                const approveTx = await usdcContract.approve(ESCROW_ADDRESS, rewardAmount);
+                await approveTx.wait();
+                console.log("Approved!");
+
+                console.log("Creating Task...");
+                const tx = await escrowContract.createTask(rewardAmount, uri);
+                await tx.wait();
+                
+                alert("Task Created Successfully On-Chain!");
+                document.getElementById('taskUri').value = "";
+                document.getElementById('taskReward').value = "";
+                loadTasks();
+            } catch (err) {
+                console.error(err);
+                alert("Transaction failed. Check console or token allowance.");
+            }
+        }
+
+        async function acceptTask(taskId) {
+            try {
+                const tx = await escrowContract.acceptTask(taskId);
+                await tx.wait();
+                alert("Task Accepted on-chain!");
+                loadTasks();
+            } catch (err) {
+                console.error(err);
+                alert("Failed to accept task.");
+            }
+        }
+
+        async function submitProof(taskId) {
+            try {
+                alert("Proof Link Submitted. Calling completeTask() view function...");
+                const tx = await escrowContract.completeTask(taskId);
+                console.log("View function executed:", tx);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function verifyAndPay(taskId) {
+            try {
+                const tx = await escrowContract.verifyAndPay(taskId);
+                await tx.wait();
+                alert("Task Verified! USDC transferred to Worker.");
+                loadTasks();
+            } catch (err) {
+                console.error(err);
+                alert("Verification failed.");
+            }
+        }
+
+        async function loadTasks() {
+            const humanList = document.getElementById('humanTaskList');
+            const agentList = document.getElementById('agentTaskList');
+            
+            let humanHTML = "";
+            let agentHTML = "";
+
+            // 1. FETCH REAL ON-CHAIN TASKS FIRST (If connected)
+            if (escrowContract) {
                 try {
-                    // Minta akses MetaMask
-                    const provider = new ethers.BrowserProvider(window.ethereum);
-                    const accounts = await provider.send("eth_requestAccounts", []);
-                    userAddress = accounts[0];
+                    const counter = await escrowContract.taskCounter();
                     
-                    // Update tampilan setelah konek
-                    connectBtn.innerText = userAddress.substring(0, 6) + "..." + userAddress.slice(-4);
-                    statusArea.innerHTML = "✅ Terkoneksi: " + userAddress + "<br><span style='font-size:12px; color:#94A3B8; font-weight:normal;'>Jaringan: Arc Testnet | Contract: " + CONTRACT_ADDRESS.substring(0,6) + "..." + "</span>";
-                } catch (error) {
-                    console.error("Gagal konek:", error);
+                    // Loop backwards to show newest real tasks first
+                    for (let i = counter; i >= 1; i--) {
+                        const task = await escrowContract.tasks(i);
+                        const rewardFormat = ethers.formatUnits(task.reward, 6);
+                        const statusText = task.status == 0 ? "OPEN (REAL)" : task.status == 1 ? "IN PROGRESS" : "PAID";
+                        const badgeClass = task.status == 0 ? "badge-real" : task.status == 1 ? "badge-progress" : "badge-paid";
+
+                        const card = `
+                            <div class="task-card" style="border-color: #00F2FE; box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);">
+                                <div>
+                                    <span class="badge ${badgeClass}">${statusText}</span>
+                                    <h3 style="margin: 5px 0;">On-Chain Task #${i}</h3>
+                                    <p style="font-size: 14px; color: #E2E8F0;">Verification Required.</p>
+                                    <p style="font-size: 14px; color: #34D399; font-weight:bold;">Reward: ${rewardFormat} USDC</p>
+                                    <p style="font-size: 12px; color: #64748B;">Agent: ${task.agent.substring(0,6)}...<br>Worker: ${task.worker == "0x0000000000000000000000000000000000000000" ? "None" : task.worker.substring(0,6)+"..."}</p>
+                                </div>
+                        `;
+
+                        // Human View sorting for real tasks
+                        if (task.status == 0) {
+                            humanHTML += card + `<button class="btn-primary" style="width: 100%; margin-top: 15px;" onclick="acceptTask(${i})">Accept Real Task</button></div>`;
+                        } else if (task.status == 1 && task.worker.toLowerCase() === userAddress.toLowerCase()) {
+                            humanHTML += card + `<button class="btn-secondary" style="width: 100%; margin-top: 15px;" onclick="submitProof(${i})">Submit Proof</button></div>`;
+                        }
+
+                        // Agent View sorting for real tasks
+                        if (task.agent.toLowerCase() === userAddress.toLowerCase()) {
+                            if (task.status == 1) {
+                                agentHTML += card + `<button class="btn-primary" style="width: 100%; margin-top: 15px;" onclick="verifyAndPay(${i})">Verify & Pay</button></div>`;
+                            } else {
+                                agentHTML += card + `</div>`;
+                            }
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error reading contract:", err);
                 }
             } else {
-                alert("MetaMask tidak ditemukan! Silakan install extension MetaMask dulu.");
+                agentHTML = "<p>Connect wallet to manage your tasks.</p>";
+            }
+
+            // 2. APPEND 10 DUMMY TASKS BELOW REAL TASKS (For Human View)
+            DUMMY_TASKS.forEach((dummy) => {
+                humanHTML += `
+                    <div class="task-card">
+                        <div>
+                            <span class="badge badge-open">OPEN (DEMO)</span>
+                            <h3 style="margin: 5px 0;">${dummy.title}</h3>
+                            <p style="font-size: 14px; color: #94A3B8;">${dummy.desc}</p>
+                            <p style="font-size: 14px; color: #34D399; font-weight:bold;">Reward: ${dummy.reward} USDC</p>
+                            <p style="font-size: 12px; color: #64748B;">Agent: SYSTEM // ${dummy.agent}<br>Worker: None</p>
+                        </div>
+                        <button class="btn-secondary" style="width: 100%; margin-top: 15px; border-color: #334155; color: #94A3B8;" onclick="demoAlert()">Accept Demo Task</button>
+                    </div>
+                `;
+            });
+
+            humanList.innerHTML = humanHTML;
+            if(escrowContract) {
+                agentList.innerHTML = agentHTML || "<p>You haven't created any on-chain tasks yet.</p>";
             }
         }
 
-        function ambilTask() {
-            if (!userAddress) {
-                alert("Silakan Connect Wallet terlebih dahulu!");
-                return;
-            }
-            alert("Memanggil Smart Contract di Arc Testnet...\n(Fitur Eksekusi Smart Contract bisa kamu kembangkan lebih lanjut!)");
-        }
-
-        // Jalankan fungsi saat tombol diklik
-        connectBtn.addEventListener('click', connectWallet);
+        // Render dummies immediately on load even if wallet not connected
+        window.onload = loadTasks;
     </script>
 </body>
 </html>
