@@ -150,6 +150,22 @@
             color: #94A3B8;
             text-align: right;
         }
+        /* Style buat input file image */
+        .file-upload-box {
+            margin-top: 15px;
+            padding: 10px;
+            background: #131B2E;
+            border: 1px dashed #00F2FE;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .file-upload-box input[type="file"] {
+            display: block;
+            width: 100%;
+            color: #94A3B8;
+            font-size: 12px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -215,7 +231,7 @@
 
     <script>
         // SMART CONTRACT ADDRESSES
-        const ESCROW_ADDRESS = "0x517251c800aA4bA686857e796c1e3D521774AAB0";
+        const ESCROW_ADDRESS = "0x121E3Bf85009Fbc84a17BF1a0CB4715752eBA32C";
         const USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
 
         // ABIs
@@ -237,7 +253,7 @@
         let provider, signer, userAddress;
         let escrowContract, usdcContract;
 
-        // 10 DUMMY TASKS (For UI Display)
+        // 10 DUMMY TASKS
         const DUMMY_TASKS = [
             { title: "Spatial Mapping", desc: "Record a 360-degree short video of the main entrance at Stasiun MRT Bundaran HI for crowd routing data.", reward: "1.50", agent: "GeoTracker_AI" },
             { title: "Inventory Verification", desc: "Check the physical stock of specific GPU models at local electronic retailers. Take a photo of the shelf.", reward: "2.00", agent: "RetailBot_v2" },
@@ -251,7 +267,6 @@
             { title: "Lighting Assessment", desc: "Take a photo of streetlamp brightness at specific coordinates during nighttime.", reward: "1.50", agent: "CityGrid_AI" }
         ];
 
-        // UI Toggles
         function switchMode(mode) {
             document.getElementById('tabHuman').classList.remove('active');
             document.getElementById('tabAgent').classList.remove('active');
@@ -268,12 +283,10 @@
             loadTasks();
         }
 
-        // Dummy Button Alert
         function demoAlert() {
             alert("This is a static demo task for display purposes.\n\nSwitch to 'AI Agent Mode' to create a real on-chain task, which will appear at the top of the list!");
         }
 
-        // Web3 Logic
         async function connectWallet() {
             if (!window.ethereum) return alert("Please install a Web3 Wallet (MetaMask, Rabby, OKX).");
             try {
@@ -301,14 +314,12 @@
             if (!uri || !rewardInput) return alert("Fill all fields");
 
             try {
-                // USDC uses 6 decimals
                 const rewardAmount = ethers.parseUnits(rewardInput, 6); 
 
                 console.log("Approving USDC...");
                 const approveTx = await usdcContract.approve(ESCROW_ADDRESS, rewardAmount);
                 await approveTx.wait();
-                console.log("Approved!");
-
+                
                 console.log("Creating Task...");
                 const tx = await escrowContract.createTask(rewardAmount, uri);
                 await tx.wait();
@@ -335,9 +346,19 @@
             }
         }
 
+        // FUNGSI SUBMIT IMAGE YANG BARU
         async function submitProof(taskId) {
+            const fileInput = document.getElementById(`imageUpload-${taskId}`);
+            
+            // Validasi apakah gambar sudah dipilih
+            if (!fileInput || fileInput.files.length === 0) {
+                return alert("ERROR: Please select an image file to prove your work before submitting!");
+            }
+
+            const fileName = fileInput.files[0].name;
+
             try {
-                alert("Proof Link Submitted. Calling completeTask() view function...");
+                alert(`Simulating IPFS Upload for: ${fileName}\n\nImage successfully linked! Calling completeTask() on-chain...`);
                 const tx = await escrowContract.completeTask(taskId);
                 console.log("View function executed:", tx);
             } catch (err) {
@@ -364,12 +385,10 @@
             let humanHTML = "";
             let agentHTML = "";
 
-            // 1. FETCH REAL ON-CHAIN TASKS FIRST (If connected)
             if (escrowContract) {
                 try {
                     const counter = await escrowContract.taskCounter();
                     
-                    // Loop backwards to show newest real tasks first
                     for (let i = counter; i >= 1; i--) {
                         const task = await escrowContract.tasks(i);
                         const rewardFormat = ethers.formatUnits(task.reward, 6);
@@ -387,14 +406,19 @@
                                 </div>
                         `;
 
-                        // Human View sorting for real tasks
                         if (task.status == 0) {
                             humanHTML += card + `<button class="btn-primary" style="width: 100%; margin-top: 15px;" onclick="acceptTask(${i})">Accept Real Task</button></div>`;
                         } else if (task.status == 1 && task.worker.toLowerCase() === userAddress.toLowerCase()) {
-                            humanHTML += card + `<button class="btn-secondary" style="width: 100%; margin-top: 15px;" onclick="submitProof(${i})">Submit Proof</button></div>`;
+                            // TAMBAHAN BOX UPLOAD GAMBAR DI SINI
+                            humanHTML += card + `
+                                <div class="file-upload-box">
+                                    <label style="font-size: 12px; color: #00F2FE; display:block; margin-bottom:5px;">📸 Upload Visual Proof</label>
+                                    <input type="file" id="imageUpload-${i}" accept="image/*">
+                                </div>
+                                <button class="btn-secondary" style="width: 100%; margin-top: 15px;" onclick="submitProof(${i})">Submit Proof</button>
+                            </div>`;
                         }
 
-                        // Agent View sorting for real tasks
                         if (task.agent.toLowerCase() === userAddress.toLowerCase()) {
                             if (task.status == 1) {
                                 agentHTML += card + `<button class="btn-primary" style="width: 100%; margin-top: 15px;" onclick="verifyAndPay(${i})">Verify & Pay</button></div>`;
@@ -410,7 +434,6 @@
                 agentHTML = "<p>Connect wallet to manage your tasks.</p>";
             }
 
-            // 2. APPEND 10 DUMMY TASKS BELOW REAL TASKS (For Human View)
             DUMMY_TASKS.forEach((dummy) => {
                 humanHTML += `
                     <div class="task-card">
@@ -432,7 +455,6 @@
             }
         }
 
-        // Render dummies immediately on load even if wallet not connected
         window.onload = loadTasks;
     </script>
 </body>
