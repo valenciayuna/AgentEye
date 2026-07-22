@@ -3,215 +3,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArcPulse - True Web3 Micro-Work</title>
+    <title>AgentEye - Be the Eyes of AI</title>
+    <!-- Import Ethers.js via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js"></script>
     <style>
-        body { background-color: #080B11; color: #F3F4F6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        nav { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #1E293B; box-sizing: border-box; }
-        .logo-container { display: flex; align-items: center; gap: 15px; }
-        .logo-text { font-size: 26px; font-weight: 800; background: linear-gradient(90deg, #00F2FE, #4FACFE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
-        .btn-connect { background: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%); color: #080B11; border: none; padding: 10px 20px; border-radius: 30px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); transition: 0.2s; }
-        .btn-connect:hover { transform: scale(1.05); }
-        .main-content { max-width: 1200px; width: 100%; text-align: center; margin-top: 20px; padding: 20px; box-sizing: border-box; }
-        .role-switcher { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; background: #131B2E; padding: 8px; border-radius: 30px; border: 1px solid #1E293B; display: inline-flex; flex-wrap: wrap; }
-        .btn-role { background: transparent; color: #94A3B8; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-role.active { background: #1E293B; color: #00F2FE; box-shadow: 0 0 10px rgba(0, 242, 254, 0.1); }
-        .task-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; text-align: left; }
-        .card { background-color: #131B2E; border: 1px solid #1E293B; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
-        .reward { color: #34D399; font-weight: bold; font-size: 13px; background: #05966922; padding: 6px 12px; border-radius: 12px; border: 1px solid #34D39944; }
-        .btn-action { margin-top: 15px; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; }
-        .btn-deposit { background: #3B82F6; color: white; }
-        .btn-accept { background: #10B981; color: white; }
-        .btn-complete { background: #F59E0B; color: white; }
-        .btn-verify { background: #8B5CF6; color: white; }
-        .btn-done { background: #1E293B; color: #64748B; cursor: not-allowed; }
+        /* BACKGROUND & FONT */
+        body {
+            background-color: #050810;
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: #F3F4F6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* NAVBAR */
+        nav {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: rgba(5, 8, 16, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-text {
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #00F2FE, #4FACFE);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        /* BUTTONS */
+        .btn-connect {
+            background: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%);
+            color: #050810;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-connect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
+        }
+
+        /* MAIN HERO SECTION */
+        .hero {
+            text-align: center;
+            margin-top: 60px;
+            padding: 0 20px;
+        }
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        .hero p {
+            color: #94A3B8;
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* LIVE STATS BANNER */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            background: rgba(19, 27, 46, 0.6);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            padding: 20px 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00F2FE;
+        }
+        .stat-label {
+            font-size: 13px;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* STATUS BOX */
+        .status-box {
+            margin-top: 30px;
+            font-weight: bold;
+            color: #00F2FE;
+            background-color: rgba(19, 27, 46, 0.8);
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: 1px dashed rgba(0, 242, 254, 0.5);
+            display: inline-block;
+        }
+
+        /* TASK GRID */
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            width: 100%;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+        .card {
+            background: rgba(19, 27, 46, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid #1E293B;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            border-color: #00F2FE;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.1);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #00F2FE, transparent);
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .card:hover::before {
+            opacity: 1;
+        }
+        
+        /* CARD ELEMENTS */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .reward {
+            color: #34D399;
+            font-weight: bold;
+            font-size: 15px;
+            background: rgba(5, 150, 105, 0.2);
+            padding: 6px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+        .agent-tag {
+            font-size: 12px;
+            color: #94A3B8;
+            background: #0F172A;
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid #1E293B;
+        }
+
+        /* BLINKING DOT */
+        .live-dot {
+            height: 10px;
+            width: 10px;
+            background-color: #10B981;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 10px #10B981;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- NAVBAR & LOGO -->
     <nav>
         <div class="logo-container">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="40" height="40">
-                <defs><linearGradient id="neon" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00F2FE" /><stop offset="100%" stop-color="#4FACFE" /></linearGradient></defs>
+                <defs>
+                    <linearGradient id="neon" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00F2FE" />
+                        <stop offset="100%" stop-color="#4FACFE" />
+                    </linearGradient>
+                </defs>
+                <!-- SVG ini cocok banget disebut Eye (Lingkaran mata + Scanner pulse) -->
                 <circle cx="200" cy="200" r="130" stroke="url(#neon)" stroke-width="25" fill="none" stroke-dasharray="600 200" stroke-linecap="round" transform="rotate(135 200 200)" />
                 <path d="M 80 210 L 145 210 L 175 120 L 225 280 L 255 190 L 320 190" stroke="url(#neon)" stroke-width="28" fill="none" stroke-linejoin="round" stroke-linecap="round" />
             </svg>
-            <h1 class="logo-text">ArcPulse</h1>
+            <h1 class="logo-text">AgentEye</h1>
         </div>
         <button id="connectBtn" class="btn-connect">🔌 Connect Wallet</button>
     </nav>
 
-    <div class="main-content">
-        <div class="role-switcher">
-            <button class="btn-role active" id="btnRoleWorker" onclick="switchRole('worker')">👨‍🔧 Worker Mode</button>
-            <button class="btn-role" id="btnRoleAgent" onclick="switchRole('agent')">🤖 AI Agent Mode (Admin)</button>
+    <!-- HERO SECTION -->
+    <div class="hero">
+        <h2>Jadilah <span style="color: #00F2FE;">Mata</span> Untuk AI.</h2>
+        <p>Selesaikan misi fisik dunia nyata dari AI Agent. Upload bukti foto, dan klaim bayaran USDC kamu secara instan tanpa biaya gas fee.</p>
+        
+        <div id="statusArea" class="status-box">
+            🔴 Status: Wallet Belum Terkoneksi
         </div>
-        <h2 style="font-size: 28px; margin-bottom: 5px;">Micro-Task Board</h2>
-        <p style="color: #94A3B8; margin-bottom: 30px;">True On-Chain Execution on Arc Testnet.</p>
-        <div id="taskGrid" class="task-grid"></div>
+
+        <!-- STATS -->
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-value">$1,240</div>
+                <div class="stat-label">USDC Paid</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">124</div>
+                <div class="stat-label">Tasks Done</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value"><span class="live-dot"></span>3</div>
+                <div class="stat-label">Active Agents</div>
+            </div>
+        </div>
     </div>
 
-    <!-- HIDDEN ELEMENT FOR PHOTO/VIDEO UPLOAD -->
-    <input type="file" id="fileUploader" accept="image/*,video/*" style="display: none;" onchange="handleFileUpload(event)">
+    <!-- TASK GRID -->
+    <div class="task-grid">
+        <!-- Task 1 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="agent-tag">🤖 Agent_Vision_X</span>
+                <span class="reward">+ 0.50 USDC</span>
+            </div>
+            <h3 style="margin: 0 0 10px 0; color: #F8FAFC;">📸 Cek Papan Iklan</h3>
+            <p style="color: #94A3B8; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
+                Pergi ke halte Sudirman. Ambil 1 foto papan iklan terbaru untuk memverifikasi pemasangan dari pihak vendor.
+            </p>
+            <button class="btn-connect" style="width: 100%; padding: 10px; font-size: 14px;" onclick="ambilTask()">Accept Task 🚀</button>
+        </div>
 
+        <!-- Task 2 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="agent-tag">🤖 RetailBot_v2</span>
+                <span class="reward">+ 0.75 USDC</span>
+            </div>
+            <h3 style="margin: 0 0 10px 0; color: #F8FAFC;">🛒 Cek Stok Minimarket</h3>
+            <p style="color: #94A3B8; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
+                Verifikasi apakah minuman energi merek X masih tersedia di rak Indomaret terdekat. Foto rak sebagai bukti.
+            </p>
+            <button class="btn-connect" style="width: 100%; padding: 10px; font-size: 14px;" onclick="ambilTask()">Accept Task 🚀</button>
+        </div>
+
+        <!-- Task 3 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="agent-tag">🤖 GeoTracker_AI</span>
+                <span class="reward">+ 1.20 USDC</span>
+            </div>
+            <h3 style="margin: 0 0 10px 0; color: #F8FAFC;">🚦 Info Antrean Cafe</h3>
+            <p style="color: #94A3B8; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
+                Hitung perkiraan orang yang mengantre di Cafe Kenangan jam 12 siang ini untuk data algoritma AI kami.
+            </p>
+            <button class="btn-connect" style="width: 100%; padding: 10px; font-size: 14px;" onclick="ambilTask()">Accept Task 🚀</button>
+        </div>
+    </div>
+
+    <!-- LOGIKA JAVASCRIPT / WEB3 -->
     <script>
-        // ==========================================
-        // SMART CONTRACT ADDRESSES
-        // ==========================================
-        const CONTRACT_ADDRESS = "0xF7659568714FfE9074C820Ea99EFd7648c2c723c"; 
-        const USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
+        // MASUKKAN ALAMAT CONTRACT DARI REMIX DI SINI !!
+        const CONTRACT_ADDRESS = "MASUKKAN_ADDRESS_CONTRACT_KAMU_DISINI";
 
-        const CONTRACT_ABI = [
-            "function createTask(uint256 _rewardAmount, string memory _taskDetailsURI) external returns (uint256)",
-            "function acceptTask(uint256 _taskId) external",
-            "function completeTask(uint256 _taskId) external view",
-            "function verifyAndPay(uint256 _taskId) external"
-        ];
-        
-        const USDC_ABI = [
-            "function approve(address spender, uint256 amount) external returns (bool)"
-        ];
-
-        let provider, signer, userAddress = "";
-        let currentRole = "worker";
-        let pendingUploadTaskIndex = null;
-
-        // 12 Tasks configuration
-        let tasks = [
-            { id: 1, status: 0, title: "📸 Sudirman Billboard Photo", reward: "0.50 USDC", agent: "Agent Vision_09", desc: "AI needs verification of the latest real-world billboard ads." },
-            { id: 2, status: 1, title: "☕ Cafe Queue Check", reward: "0.35 USDC", agent: "GeoScout_AI", desc: "Take a front-view photo of the cafe for real-time crowd data." },
-            { id: 3, status: 1, title: "🛒 Minimarket Stock Check", reward: "0.20 USDC", agent: "RetailBot_V2", desc: "Verify instant noodle stock availability on local minimarket shelves." },
-            { id: 4, status: 0, title: "🚦 Traffic Light Report", reward: "0.45 USDC", agent: "Traffic_Net", desc: "Record a 10-second video to ensure the red light functions normally." },
-            { id: 5, status: 0, title: "🏧 Active ATM Verification", reward: "0.30 USDC", agent: "FinanceAI", desc: "Check if a specific ATM machine is currently offline or fully operational." },
-            { id: 6, status: 1, title: "🔌 EV Charging Station Check", reward: "0.75 USDC", agent: "EcoCharge_AI", desc: "Verify the physical condition of cables and EV parking slot availability." },
-            { id: 7, status: 0, title: "🌤️ Visual Weather Report", reward: "0.15 USDC", agent: "WeatherNode", desc: "Take a clear photo of the current sky to validate satellite data." },
-            { id: 8, status: 1, title: "🍔 Local Menu Translation", reward: "1.00 USDC", agent: "LingoBot", desc: "Photo of a local food stall menu for AI language model training." },
-            { id: 9, status: 0, title: "🌳 City Park Cleanliness", reward: "0.40 USDC", agent: "CivicScout", desc: "Rate and provide photo proof of public trash bins in the park." },
-            { id: 10, status: 1, title: "🚧 Road Repair Check", reward: "0.60 USDC", agent: "CityMapper_AI", desc: "Verify if the cable excavation project on Street X has been closed." },
-            { id: 11, status: 0, title: "🚌 Bus Stop Timetable", reward: "0.25 USDC", agent: "Transit_Tracker", desc: "Photograph the current timetable posted at the central bus station." },
-            { id: 12, status: 1, title: "💧 Public Fountain Status", reward: "0.10 USDC", agent: "CivicScout", desc: "Verify if the main plaza fountain is currently turned on or empty." }
-        ];
+        const connectBtn = document.getElementById('connectBtn');
+        const statusArea = document.getElementById('statusArea');
+        let userAddress = "";
 
         async function connectWallet() {
             if (window.ethereum) {
                 try {
-                    provider = new ethers.BrowserProvider(window.ethereum);
+                    const provider = new ethers.BrowserProvider(window.ethereum);
                     const accounts = await provider.send("eth_requestAccounts", []);
-                    signer = await provider.getSigner();
                     userAddress = accounts[0];
-                    document.getElementById('connectBtn').innerText = userAddress.substring(0, 6) + "..." + userAddress.slice(-4);
-                } catch (error) { console.error("Connection failed:", error); }
-            } else { alert("MetaMask extension not found!"); }
-        }
-        document.getElementById('connectBtn').addEventListener('click', connectWallet);
-
-        function switchRole(role) {
-            currentRole = role;
-            document.getElementById('btnRoleWorker').className = role === 'worker' ? "btn-role active" : "btn-role";
-            document.getElementById('btnRoleAgent').className = role === 'agent' ? "btn-role active" : "btn-role";
-            renderTasks();
-        }
-
-        function renderTasks() {
-            const grid = document.getElementById('taskGrid');
-            grid.innerHTML = ""; 
-            tasks.forEach((task, index) => {
-                let buttonHTML = "";
-                if (currentRole === "agent") {
-                    if (task.status === 0) buttonHTML = `<button id="btn-${index}" class="btn-action btn-deposit" onclick="executeAction(${index}, 'create')">🔒 Deposit & Open Task</button>`;
-                    else if (task.status === 1) buttonHTML = `<button class="btn-action btn-done" disabled>Waiting for Worker...</button>`;
-                    else if (task.status === 2) buttonHTML = `<button class="btn-action btn-done" disabled>In Progress...</button>`;
-                    else if (task.status === 3) buttonHTML = `<button id="btn-${index}" class="btn-action btn-verify" onclick="executeAction(${index}, 'verify')">✅ Verify & Pay</button>`;
-                    else if (task.status === 4) buttonHTML = `<button class="btn-action btn-done" disabled>💸 Paid</button>`;
-                } else if (currentRole === "worker") {
-                    if (task.status === 0) buttonHTML = `<button class="btn-action btn-done" disabled>Agent Not Deposited</button>`;
-                    else if (task.status === 1) buttonHTML = `<button id="btn-${index}" class="btn-action btn-accept" onclick="executeAction(${index}, 'accept')">🚀 Take Task</button>`;
-                    else if (task.status === 2) buttonHTML = `<button id="btn-${index}" class="btn-action btn-complete" onclick="openFilePicker(${index})">📤 Upload Proof (Photo/Video)</button>`;
-                    else if (task.status === 3) buttonHTML = `<button class="btn-action btn-done" disabled>Waiting Review...</button>`;
-                    else if (task.status === 4) buttonHTML = `<button class="btn-action btn-done" disabled>🎉 Payment Received</button>`;
-                }
-
-                grid.innerHTML += `
-                    <div class="card">
-                        <div>
-                            <div class="card-header">
-                                <h3 style="margin:0; color:#F8FAFC; font-size:16px;">${task.title}</h3>
-                                <span class="reward">+ ${task.reward}</span>
-                            </div>
-                            <span style="font-size:12px; color:#64748B;">🤖 Client: ${task.agent}</span>
-                            <p style="color:#94A3B8; font-size:13px; line-height:1.5; margin-top:15px;">${task.desc}</p>
-                        </div>
-                        ${buttonHTML}
-                    </div>
-                `;
-            });
-        }
-
-        // --- FILE UPLOAD LOGIC ---
-        function openFilePicker(taskIndex) {
-            if (!userAddress) return alert("Please connect your wallet first!");
-            pendingUploadTaskIndex = taskIndex;
-            document.getElementById('fileUploader').click(); 
-        }
-
-        async function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            const btn = document.getElementById(`btn-${pendingUploadTaskIndex}`);
-            btn.innerText = `⏳ Uploading ${file.name}...`;
-            btn.disabled = true;
-
-            setTimeout(() => {
-                alert(`File "${file.name}" successfully uploaded to decentralized storage (IPFS)! Proceeding to on-chain completion...`);
-                executeAction(pendingUploadTaskIndex, 'complete');
-            }, 1500);
-        }
-
-        // --- ON-CHAIN SMART CONTRACT EXECUTION ---
-        async function executeAction(taskIndex, actionType) {
-            if (!userAddress) return alert("Please connect your wallet first!");
-            
-            const btn = document.getElementById(`btn-${taskIndex}`);
-            const originalText = btn.innerText;
-            btn.innerText = "⏳ Confirm in MetaMask...";
-            btn.disabled = true;
-
-            try {
-                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-                let tx;
-
-                if (actionType === 'create') {
-                    const usdcContract = new ethers.Contract(USDC_ADDRESS, USDC_ABI, signer);
-                    const amount = ethers.parseUnits("0.5", 6); 
                     
-                    btn.innerText = "1/2: Approve USDC...";
-                    const txApprove = await usdcContract.approve(CONTRACT_ADDRESS, amount);
-                    await txApprove.wait();
-
-                    btn.innerText = "2/2: Deposit Task...";
-                    tx = await contract.createTask(amount, "ipfs://dummy-uri");
-                } 
-                else if (actionType === 'accept') { tx = await contract.acceptTask(tasks[taskIndex].id); } 
-                else if (actionType === 'complete') { tx = await contract.completeTask(tasks[taskIndex].id); } 
-                else if (actionType === 'verify') { tx = await contract.verifyAndPay(tasks[taskIndex].id); }
-                
-                btn.innerText = "⛓️ Processing Block...";
-                await tx.wait(); 
-
-                alert("Transaction Successful! 🚀");
-                tasks[taskIndex].status += 1; 
-                renderTasks();
-
-            } catch (error) {
-                console.error("On-Chain Error:", error);
-                alert("Transaction failed or rejected. Please ensure you have testnet gas and USDC.");
-                btn.innerText = originalText;
-                btn.disabled = false;
+                    connectBtn.innerText = userAddress.substring(0, 6) + "..." + userAddress.slice(-4);
+                    statusArea.innerHTML = "✅ Terkoneksi: " + userAddress + "<br><span style='font-size:12px; color:#94A3B8; font-weight:normal;'>Jaringan: Arc Testnet | Escrow Active 🟢</span>";
+                    statusArea.style.borderColor = "#10B981";
+                    statusArea.style.color = "#10B981";
+                } catch (error) {
+                    console.error("Gagal konek:", error);
+                }
+            } else {
+                alert("MetaMask tidak ditemukan! Silakan install extension MetaMask dulu.");
             }
         }
 
-        renderTasks();
+        function ambilTask() {
+            if (!userAddress) {
+                alert("Silakan Connect Wallet terlebih dahulu di pojok kanan atas!");
+                return;
+            }
+            alert("Memanggil AgentEye Smart Contract di Arc Testnet...\n(Escrow 0.5 USDC siap diamankan)");
+        }
+
+        connectBtn.addEventListener('click', connectWallet);
     </script>
 </body>
 </html>
